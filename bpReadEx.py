@@ -19,7 +19,7 @@ with Stream("fs.bp", "rra") as ibpFile:
             elif inqrd_varInfo["Shape"] != "":
                 # Global Array
                 shape = inqrd_varInfo["Shape"]
-                print(f"Reading var {var_name} with shape {shape}")
+                print(f"Reading global var {var_name} with shape {shape}")
                 #for i in range(0, inqrd_var.shape[1]):
                 #    print(str(inqrd_var[i]))
             else:
@@ -35,15 +35,16 @@ with Stream("fs.bp", "rra") as ibpFile:
                         print(f"step {step} block {block_id} shape {data.shape}")
     else:
         for varName in varInfo:
-            print(f"Reading variable {varName}:")
-            print(f"{varInfo[varName]}:\n")
             type = varInfo[varName]["Type"]
-            print(f"  type:  {type}\n")
-            if not varInfo[varName]["SingleValue"]:
+            print(f"Reading variable {varName} of type {type}")
+            if varInfo[varName]["SingleValue"] == "true":
+                value = ibpFile.read(varName)
+                print(f"  value: {value}")
+            else:
                 shape = varInfo[varName]["Shape"]
-                print(f"  shape:  {shape}\n")
+                print(f"  shape:  {shape}")
             if varInfo[varName]["Type"] != "string":
                 min = varInfo[varName]["Min"]
                 max = varInfo[varName]["Max"]
-                print(f"  min/max:  {min} / {max}\n")
-                
+                print(f"  min/max:  {min} / {max}")
+            print(f"")
